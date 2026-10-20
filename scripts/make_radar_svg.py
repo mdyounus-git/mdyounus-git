@@ -1,8 +1,8 @@
 """Two animated radar (spider) charts from the "radar" block in docs/profile.json:
-programming on the left, security on the right. The shape grows out of the centre once,
+tech on the left, security on the right. The shape grows out of the centre once,
 then the glowing points keep a slow pulse.
 
-python scripts/make_radar_svg.py   ->  radar-programming.svg, radar-security.svg
+python scripts/make_radar_svg.py   ->  radar-tech.svg, radar-security.svg
 """
 
 import json
@@ -88,7 +88,7 @@ def radar(spec):
 
 def main():
     data = json.loads((ROOT / "docs" / "profile.json").read_text(encoding="utf-8"))["radar"]
-    for key in ("programming", "security"):
+    for key in data:
         out = ROOT / f"radar-{key}.svg"
         out.write_text(radar(data[key]), encoding="utf-8")
         print(f"wrote {out.name}")

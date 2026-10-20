@@ -9,7 +9,7 @@
 <a href="https://mdyounus-git.github.io/mdyounus-git/?cmd=stats"><img src="./contrib-heatmap.svg" width="860" alt="Contribution heatmap for the last year, refreshed daily" /></a>
 <table>
   <tr>
-    <td valign="top"><a href="https://mdyounus-git.github.io/mdyounus-git/?cmd=levels"><img src="./radar-programming.svg" width="430" alt="Programming radar: Python, C, Web, Java/Android, Go, PowerShell" /></a></td>
+    <td valign="top"><a href="https://mdyounus-git.github.io/mdyounus-git/?cmd=levels"><img src="./radar-tech.svg" width="430" alt="Tech radar: strongest in networking, operating systems, Bash and cloud; also Python, PowerShell, Active Directory" /></a></td>
     <td valign="top"><a href="https://mdyounus-git.github.io/mdyounus-git/?cmd=levels"><img src="./radar-security.svg" width="430" alt="Security radar: strongest in SOC / blue team, incident response and threat detection; pentest certified" /></a></td>
   </tr>
 </table>

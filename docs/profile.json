@@ -31,30 +31,25 @@
       "Penetration Testing (certified)",
       "Secure Coding"
     ],
-    "Languages": [
+    "Infrastructure": [
+      "Networking",
+      "Operating Systems (Linux, Windows)",
+      "Bash",
+      "Cloud (AWS)",
+      "Active Directory"
+    ],
+    "Scripting": [
       "Python",
-      "C",
-      "Go",
-      "PHP",
       "PowerShell",
-      "AssemblyScript"
-    ],
-    "Web": [
-      "HTML5",
-      "CSS3"
-    ],
-    "Systems": [
-      "Linux",
-      "Kali Linux",
-      "Windows"
+      "Bash"
     ]
   },
   "tools": [
     "Kali Linux",
     "Cisco Packet Tracer",
+    "AWS",
     "Windows Terminal",
     "PowerShell",
-    "AWS",
     "Jira"
   ],
   "hobbies": [
@@ -93,20 +88,20 @@
       "Network Security · Secure Coding · AI for Security"
     ],
     [
-      "Langs",
-      "Python · C · Go · PHP · PowerShell"
+      "Strong",
+      "Networking · Operating Systems · Bash · Cloud"
     ],
     [
-      "",
-      "AssemblyScript · HTML5 · CSS3"
+      "Script",
+      "Python · PowerShell · Bash"
+    ],
+    [
+      "Infra",
+      "Active Directory · Linux · Windows · AWS"
     ],
     [
       "Tools",
       "Kali Linux · Cisco Packet Tracer · AWS · Jira"
-    ],
-    [
-      "",
-      "Linux · Windows Terminal"
     ],
     [
       "Hobby",
@@ -122,6 +117,47 @@
     ]
   ],
   "radar": {
+    "tech": {
+      "title": "~/skills/tech.radar",
+      "caption": "strongest: networking · OS · bash · cloud",
+      "axes": [
+        [
+          "Networking",
+          90,
+          ""
+        ],
+        [
+          "Operating Systems",
+          88,
+          ""
+        ],
+        [
+          "Bash",
+          85,
+          ""
+        ],
+        [
+          "Cloud",
+          82,
+          ""
+        ],
+        [
+          "Python",
+          72,
+          ""
+        ],
+        [
+          "PowerShell",
+          75,
+          ""
+        ],
+        [
+          "Active Directory",
+          74,
+          ""
+        ]
+      ]
+    },
     "security": {
       "title": "~/skills/security.radar",
       "caption": "focus: DEFENSIVE / blue team  ·  pentest certified",
@@ -155,42 +191,6 @@
           "Network Security",
           82,
           "def"
-        ]
-      ]
-    },
-    "programming": {
-      "title": "~/skills/programming.radar",
-      "caption": "builds security tooling, labs and apps",
-      "axes": [
-        [
-          "Python",
-          85,
-          ""
-        ],
-        [
-          "C",
-          70,
-          ""
-        ],
-        [
-          "Web HTML/CSS/PHP",
-          72,
-          ""
-        ],
-        [
-          "Java / Android",
-          60,
-          ""
-        ],
-        [
-          "Go",
-          55,
-          ""
-        ],
-        [
-          "PowerShell",
-          72,
-          ""
         ]
       ]
     }
