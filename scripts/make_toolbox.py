@@ -1,10 +1,9 @@
 """The toolbox panel: rows of tool tiles under a heading, from "toolbox" in docs/profile.json.
 
 Brand logos come from scripts/tool_icons.json (Simple Icons, CC0) in their official
-colours. Tools that have no logo there get a hand-drawn line icon from GLYPHS in that
-product's own brand colour (BRAND); anything unknown gets a two-letter monogram in the
-theme green. Logos whose brand colour is black or very dark are drawn in white, the way
-those brands show themselves on dark backgrounds, so nothing disappears on the dark tiles.
+colours, drawn like app icons: the brand colour fills a rounded square and the logo sits
+on it in white. Tools without a logo there get a hand-drawn icon from GLYPHS on their own
+brand colour (BRAND); anything unknown gets a two-letter monogram on the theme green.
 """
 
 import json
@@ -58,31 +57,43 @@ BRAND = {
 }
 
 
-def visible(hex_colour):
-    """Brand colour, or white when it is too dark to see on the dark tiles."""
-    h = hex_colour.lstrip("#")
-    r, g, b = (int(h[i:i + 2], 16) / 255 for i in (0, 2, 4))
-    lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
-    return "#f0f6fc" if lum < 0.18 else hex_colour
-
-
 def key(name):
     k = "".join(ch for ch in name.lower() if ch.isalnum())
     return ALIASES.get(k, k)
 
 
-def icon(name, cx, cy, size=30):
+def lum(hex_colour):
+    """Relative luminance (WCAG) of a #rrggbb colour."""
+    h = hex_colour.lstrip("#")
+    c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    c = [v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4 for v in c]
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+
+
+def icon(name, cx, cy, box=42, size=24):
+    """An app-style icon: the brand colour as the rounded background, the logo on top in
+    white (or near-black when the brand colour is light), like the tool's own app icon."""
     k = key(name)
-    s = size / 24
     if k in LOGOS:
-        return (f'<g transform="translate({cx - size / 2:.1f} {cy - size / 2:.1f}) scale({s:.3f})">'
-                f'<path d="{LOGOS[k]["d"]}" fill="{visible(LOGOS[k].get("hex", NEON))}"/></g>')
+        bg = LOGOS[k].get("hex", NEON)
+    elif k in GLYPHS:
+        bg = BRAND.get(k, NEON)
+    else:
+        bg = NEON
+    fg = "#0d1117" if lum(bg) > 0.45 else "#ffffff"
+    x, y = cx - box / 2, cy - box / 2
+    # a hairline keeps very dark brand squares (e.g. Splunk's black) visible on the dark tile
+    edge = f' stroke="{BORDER}"' if lum(bg) < 0.03 else ""
+    tile = f'<rect x="{x:.1f}" y="{y:.1f}" width="{box}" height="{box}" rx="10" fill="{bg}"{edge}/>'
+    s = size / 24
+    at = f'translate({cx - size / 2:.1f} {cy - size / 2:.1f}) scale({s:.3f})'
+    if k in LOGOS:
+        return tile + f'<g transform="{at}"><path d="{LOGOS[k]["d"]}" fill="{fg}"/></g>'
     if k in GLYPHS:
-        return (f'<g transform="translate({cx - size / 2:.1f} {cy - size / 2:.1f}) scale({s:.3f})">'
-                f'{GLYPHS[k].format(c=visible(BRAND.get(k, NEON)))}</g>')
+        return tile + f'<g transform="{at}">{GLYPHS[k].format(c=fg)}</g>'
     mono = "".join(w[0] for w in name.split()[:2]).upper() if " " in name else name[:2].title()
-    return (f'<text x="{cx}" y="{cy + 6}" font-size="17" font-weight="bold" fill="{NEON}" '
-            f'text-anchor="middle">{esc(mono)}</text>')
+    return tile + (f'<text x="{cx}" y="{cy + 6}" font-size="16" font-weight="bold" fill="{fg}" '
+                   f'text-anchor="middle">{esc(mono)}</text>')
 
 
 def height(spec):
