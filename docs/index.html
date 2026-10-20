@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>younus@github — terminal</title>
+<meta name="description" content="Interactive terminal profile of Mohammed Younus M, Cybersecurity Engineering student. Type help.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230d1117'/%3E%3Ctext x='3' y='12' font-size='10' font-family='monospace' fill='%2339d353'%3E%3E_%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #010409; --win: #0d1117; --bar: #161b22; --border: #30363d;
+    --text: #c9d1d9; --muted: #8b949e; --green: #39d353; --neon: #69f0a0;
+    --cyan: #58a6ff; --pink: #f778ba; --yellow: #e3b341; --red: #ff7b72;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: var(--mono); }
+  body { display: flex; justify-content: center; padding: 24px 16px; }
+  .term { width: 100%; max-width: 980px; height: calc(100vh - 48px); display: flex; flex-direction: column;
+          background: var(--win); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+          box-shadow: 0 0 0 1px #000, 0 20px 60px rgba(57, 211, 83, .08); }
+  .bar { display: flex; align-items: center; gap: 8px; padding: 9px 14px; background: var(--bar);
+         border-bottom: 1px solid var(--border); flex: none; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .bar .title { flex: 1; text-align: center; color: var(--muted); font-size: 12px; margin-right: 52px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 14px 0; flex: none; }
+  .chips button { font: 12px var(--mono); color: var(--green); background: transparent; border: 1px solid var(--border);
+                  border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+  .chips button:hover, .chips button:focus-visible { border-color: var(--green); background: rgba(57, 211, 83, .08); outline: none; }
+  .screen { flex: 1; overflow-y: auto; padding: 14px; font-size: 14px; line-height: 1.55; cursor: text; }
+  .line { white-space: pre-wrap; word-break: break-word; }
+  .prompt { color: var(--neon); }
+  .path { color: var(--cyan); }
+  .k { color: var(--green); font-weight: bold; }
+  .m { color: var(--muted); }
+  .c { color: var(--cyan); }
+  .p { color: var(--pink); }
+  .y { color: var(--yellow); }
+  .r { color: var(--red); }
+  a { color: var(--cyan); }
+  .art { color: var(--green); font-size: 9px; line-height: 1.08; white-space: pre; margin: 0; }
+  .neo { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
+  .input-row { display: flex; align-items: baseline; }
+  .input-row input { flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: var(--text);
+                     font: 14px var(--mono); caret-color: var(--neon); padding: 0 0 0 1ch; }
+  .heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 10px); gap: 2px; margin: 6px 0; overflow-x: auto; }
+  .heat span { width: 10px; height: 10px; border-radius: 2px; }
+  @media (max-width: 600px) {
+    body { padding: 0; }
+    .term { height: 100vh; border-radius: 0; border: 0; }
+    .screen, .input-row input { font-size: 16px; }
+    .art { font-size: 6px; }
+  }
+</style>
+</head>
+<body>
+<main class="term" aria-label="Interactive terminal">
+  <div class="bar"><span class="dot" style="background:#ff5f56"></span><span class="dot" style="background:#ffbd2e"></span><span class="dot" style="background:#27c93f"></span><span class="title">younus@github: ~</span></div>
+  <nav class="chips" id="chips" aria-label="Quick commands"></nav>
+  <div class="screen" id="screen" role="log" aria-live="polite">
+    <div id="out"></div>
+    <label class="input-row" for="cmd"><span><span class="prompt">younus@github</span>:<span class="path">~</span>$</span><input id="cmd" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type a command"></label>
+  </div>
+</main>
+<script>
+(() => {
+  const out = document.getElementById("out");
+  const input = document.getElementById("cmd");
+  const screen = document.getElementById("screen");
+  const RAW = "https://raw.githubusercontent.com/mdyounus-git/mdyounus-git/main/data/contributions.json";
+  const PALETTE = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353", "#69f0a0"];
+  let P = null, ART = "", history = [], hpos = 0, queue = Promise.resolve();
+  const submit = v => (queue = queue.then(() => run(v)));  // one command at a time, in order
+
+  // ---------- output helpers ----------
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const scroll = () => { screen.scrollTop = screen.scrollHeight; };
+  function print(...parts) {          // parts: strings, or [text, cls], or [text, "a", href]
+    const line = el("div", "line");
+    for (const p of parts) {
+      if (typeof p === "string") line.append(p);
+      else if (p[1] === "a") { const a = el("a", null, p[0]); a.href = p[2]; a.target = "_blank"; a.rel = "noopener"; line.append(a); }
+      else line.append(el("span", p[1], p[0]));
+    }
+    out.append(line); scroll(); return line;
+  }
+  const blank = () => print(" ");
+  const kv = (k, v, w = 11) => print([(k + ":").padEnd(w), "k"], v);
+  const list = (items, bullet = "  ▸ ") => items.forEach(i => print([bullet, "m"], i));
+
+  // ---------- commands ----------
+  const C = {
+    help: { d: "list every command", f() {
+      print(["Available commands", "y"]); blank();
+      for (const [n, c] of Object.entries(C)) if (!c.hidden) print(["  " + n.padEnd(13), "k"], [c.d, "m"]);
+      blank(); print(["Tip: ", "m"], "Tab completes, ↑/↓ walk history, Ctrl+L clears. Try ", ["cat skills.txt", "c"], ".");
+    }},
+    whoami: { d: "who I am, in one breath", f() {
+      print([P.name, "k"], [" — " + P.role, "m"]);
+      print([P.uni + ", " + P.location, "m"]);
+      blank(); P.about.forEach(l => print(l));
+    }},
+    about: { d: "same as whoami", hidden: true, f: () => C.whoami.f() },
+    skills: { d: "what I work with", f() {
+      for (const [group, items] of Object.entries(P.skills)) {
+        print([group, "y"]); list(items); blank();
+      }
+    }},
+    tools: { d: "tools and platforms I use", f: () => list(P.tools) },
+    interests: { d: "areas of cybersecurity I focus on", f: () => list(P.interests) },
+    hobbies: { d: "what I do for fun", f: () => list(P.hobbies) },
+    education: { d: "where I study", f() { kv("Degree", P.role); kv("College", P.uni); kv("Location", P.location); } },
+    contact: { d: "find me elsewhere", f() {
+      for (const [n, u] of Object.entries(P.socials)) print([n.padEnd(11), "k"], [u.replace("https://", ""), "a", u]);
+    }},
+    socials: { d: "same as contact", hidden: true, f: () => C.contact.f() },
+    neofetch: { d: "system info, spider edition", f() {
+      const box = el("div", "neo");
+      box.append(el("pre", "art", ART));
+      const info = el("div");
+      const head = el("div", "line"); head.append(el("span", "prompt", P.handle + "@github")); info.append(head);
+      info.append(el("div", "line m", "-".repeat(13)));
+      for (const [k, v] of P.card) {
+        const l = el("div", "line"); l.append(el("span", "k", (k ? k + ":" : "").padEnd(8)), v); info.append(l);
+      }
+      const sw = el("div", "line"); sw.style.marginTop = "8px";
+      PALETTE.concat(["#58a6ff", "#f778ba"]).forEach(c => { const s = el("span"); s.textContent = "   "; s.style.background = c; s.style.marginRight = "3px"; sw.append(s); });
+      info.append(sw); box.append(info); out.append(box); scroll();
+    }},
+    stats: { d: "my live GitHub contribution stats", async f() {
+      const wait = print(["fetching contributions…", "m"]);
+      try {
+        const d = await (await fetch(RAW, { cache: "no-store" })).json();
+        wait.remove();
+        kv("Total", d.total.toLocaleString() + " contributions in the last year", 16);
+        kv("Longest streak", d.longest_streak + " days", 16);
+        kv("Current streak", d.current_streak + " days", 16);
+        if (d.best_day && d.best_day.count) kv("Best day", d.best_day.count + " on " + d.best_day.date, 16);
+        kv("Updated", d.fetched, 16);
+        const g = el("div", "heat");
+        d.days.forEach(x => { const s = el("span"); s.style.background = PALETTE[x.level] || PALETTE[0]; s.title = x.count + " on " + x.date; g.append(s); });
+        out.append(g); scroll();
+      } catch (e) { wait.textContent = "could not reach GitHub — try again in a moment"; wait.className = "line r"; }
+    }},
+    github: { d: "open my GitHub profile", f: () => open1("GitHub") },
+    linkedin: { d: "open my LinkedIn", f: () => open1("LinkedIn") },
+    instagram: { d: "open my Instagram", hidden: true, f: () => open1("Instagram") },
+    ls: { d: "list files", f: () => print(...FILES.flatMap(n => [[n, "c"], "  "])) },
+    cat: { d: "read a file, e.g. cat skills.txt", hidden: true, f(args) {
+      const n = (args[0] || "").replace(/\.txt$/, "");
+      if (!args[0]) return print(["cat: missing file name — try ", "m"], ["ls", "c"]);
+      if (FILES.includes(n + ".txt") && C[n]) return C[n].f();
+      print(["cat: " + args[0] + ": No such file or directory", "r"]);
+    }},
+    banner: { d: "the spider", f: () => { out.append(el("pre", "art", ART)); scroll(); } },
+    history: { d: "commands you have run", f: () => history.forEach((h, i) => print([String(i + 1).padStart(4) + "  ", "m"], h)) },
+    date: { d: "current date and time", f: () => print(new Date().toString()) },
+    echo: { d: "print text", hidden: true, f: args => print(args.join(" ")) },
+    pwd: { d: "where am I", hidden: true, f: () => print("/home/younus") },
+    clear: { d: "clear the screen", f: () => { out.textContent = ""; } },
+    sudo: { d: "", hidden: true, f: () => print(["younus is not in the sudoers file. This incident will be reported. 🕷️", "r"]) },
+    rm: { d: "", hidden: true, f: () => print(["nice try. this terminal is read-only.", "r"]) },
+    exit: { d: "", hidden: true, f: () => print(["there is no escape from the web. 🕸️", "p"]) },
+  };
+  const FILES = ["whoami.txt", "skills.txt", "tools.txt", "interests.txt", "hobbies.txt", "education.txt", "contact.txt"];
+  function open1(name) { const u = P.socials[name]; print(["opening " + u + " …", "m"]); window.open(u, "_blank", "noopener"); }
+
+  // ---------- input loop ----------
+  async function run(raw) {
+    const line = raw.trim();
+    print(["younus@github", "prompt"], ":", ["~", "path"], "$ ", line);
+    if (!line) return;
+    history.push(line); hpos = history.length;
+    const [name, ...args] = line.split(/\s+/);
+    const c = C[name.toLowerCase()];
+    if (c) await c.f(args);
+    else print(["command not found: " + name + " — type ", "r"], ["help", "c"]);
+    if (name !== "clear") blank();
+  }
+
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter") { const v = input.value; input.value = ""; submit(v); }
+    else if (e.key === "ArrowUp") { if (hpos > 0) input.value = history[--hpos]; e.preventDefault(); }
+    else if (e.key === "ArrowDown") { hpos = Math.min(hpos + 1, history.length); input.value = history[hpos] || ""; e.preventDefault(); }
+    else if (e.key === "Tab") {
+      e.preventDefault();
+      const [n, ...rest] = input.value.split(" ");
+      const pool = rest.length ? FILES : Object.keys(C).filter(k => !C[k].hidden || k === "cat");
+      const word = rest.length ? rest[rest.length - 1] : n;
+      const hits = pool.filter(k => k.startsWith(word));
+      if (hits.length === 1) input.value = rest.length ? [n, ...rest.slice(0, -1), hits[0]].join(" ") : hits[0] + " ";
+      else if (hits.length > 1) { print(["younus@github", "prompt"], ":", ["~", "path"], "$ ", input.value); print([hits.join("   "), "c"]); }
+    }
+    else if (e.key === "l" && e.ctrlKey) { e.preventDefault(); C.clear.f(); }
+  });
+  screen.addEventListener("click", () => { if (!getSelection().toString()) input.focus(); });
+
+  const chips = document.getElementById("chips");
+  ["help", "whoami", "skills", "tools", "hobbies", "neofetch", "stats", "contact", "clear"].forEach(n => {
+    const b = el("button", null, n); b.type = "button";
+    b.addEventListener("click", () => { submit(n); input.focus(); });
+    chips.append(b);
+  });
+
+  // ---------- boot ----------
+  Promise.all([
+    fetch("profile.json").then(r => r.json()),
+    fetch("spider.txt").then(r => r.text()).catch(() => ""),
+  ]).then(async ([p, art]) => {
+    P = p; ART = art.replace(/\s+$/, "");
+    print(["Welcome to " + P.handle + "'s terminal. ", "m"], "Type ", ["help", "c"], " or click a command above.");
+    blank();
+    const first = new URLSearchParams(location.search).get("cmd");
+    await submit(first && C[first] ? first : "neofetch");
+    input.focus();
+  }).catch(() => print(["failed to load profile data — refresh the page", "r"]));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{
+  "name": "Mohammed Younus M",
+  "handle": "younus",
+  "github": "mdyounus-git",
+  "role": "Cybersecurity Engineering student",
+  "uni": "Sri Siddhartha Institute of Technology",
+  "location": "Tumkur, Karnataka, India",
+  "since": "Nov 2024",
+  "about": [
+    "Cybersecurity Engineering student passionate about Security Operations,",
+    "Threat Detection, Network Security and Secure Software Development.",
+    "I build cybersecurity projects, solve Capture The Flag challenges and",
+    "explore defensive security techniques through hands-on practice.",
+    "Always learning, building, and contributing to practical security solutions."
+  ],
+  "interests": [
+    "SOC Operations", "Threat Detection", "Incident Response", "Network Security",
+    "Secure Software Development", "AI for Cybersecurity"
+  ],
+  "skills": {
+    "Security": ["Security Operations (SOC)", "Threat Detection", "Incident Response", "Network Security", "Secure Coding", "CTF problem solving"],
+    "Languages": ["Python", "C", "Go", "PHP", "PowerShell", "AssemblyScript"],
+    "Web": ["HTML5", "CSS3"],
+    "Systems": ["Linux", "Kali Linux", "Windows"]
+  },
+  "tools": ["Kali Linux", "Cisco Packet Tracer", "Windows Terminal", "PowerShell", "AWS", "Jira"],
+  "hobbies": [
+    "Capture The Flag: web, forensics, Active Directory",
+    "Building cybersecurity projects",
+    "Hands-on defensive security labs"
+  ],
+  "socials": {
+    "GitHub": "https://github.com/mdyounus-git",
+    "LinkedIn": "https://www.linkedin.com/in/mdyounusm",
+    "Instagram": "https://instagram.com/mdyounus_28"
+  },
+  "card": [
+    ["Name", "Mohammed Younus M"],
+    ["Role", "Cybersecurity Engineering student"],
+    ["Uni", "Sri Siddhartha Institute of Technology"],
+    ["Home", "Tumkur, Karnataka, India"],
+    ["Focus", "SOC · Threat Detection · Incident Response"],
+    ["Also", "Network Security · Secure Coding · AI for Security"],
+    ["Langs", "Python · C · Go · PHP · PowerShell"],
+    ["", "AssemblyScript · HTML5 · CSS3"],
+    ["Tools", "Kali Linux · Cisco Packet Tracer · AWS · Jira"],
+    ["", "Linux · Windows Terminal"],
+    ["Hobby", "Capture The Flag — web, forensics, AD"],
+    ["Uptime", "on GitHub since Nov 2024"],
+    ["Status", "always learning, building, breaking (legally)"]
+  ]
+}

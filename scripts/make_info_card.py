@@ -1,9 +1,10 @@
 """Neofetch-style info card whose lines fade and slide in on a stagger.
 
-Edit LINES to change what it says, then:  python scripts/make_info_card.py
+Edit the "card" list in docs/profile.json, then:  python scripts/make_info_card.py
 STATIC=1 writes a frozen frame (no animation).
 """
 
+import json
 import os
 
 from theme import CYAN, GREEN, MUTED, NEON, PALETTE, ROOT, TEXT, esc, window
@@ -13,21 +14,8 @@ WIDTH, HEIGHT = 490, 460
 STATIC = os.environ.get("STATIC") == "1"
 
 USER = "younus@github"
-LINES = [
-    ("Name", "Mohammed Younus M"),
-    ("Role", "Cybersecurity Engineering student"),
-    ("Uni", "Sri Siddhartha Institute of Technology"),
-    ("Home", "Tumkur, Karnataka, India"),
-    ("Focus", "SOC · Threat Detection · Incident Response"),
-    ("Also", "Network Security · Secure Coding · AI for Security"),
-    ("Langs", "Python · C · Go · PHP · PowerShell · HTML/CSS"),
-    ("Tools", "Linux · Kali · Cisco Packet Tracer · AWS · Jira"),
-    ("Hobby", "Capture The Flag — web, forensics, AD"),
-    ("Repos", "cisco-packet-tracer-labs · THE-MATRIX"),
-    ("", "WOMEN-SAFETY-ANDROID-APPLICATION"),
-    ("Uptime", "on GitHub since Nov 2024"),
-    ("Status", "always learning, building, breaking (legally)"),
-]
+# one source of truth, shared with the live terminal in docs/
+LINES = [tuple(r) for r in json.loads((ROOT / "docs" / "profile.json").read_text(encoding="utf-8"))["card"]]
 
 X, Y0, STEP = 24, 62, 22
 START, GAP = 0.5, 0.16
@@ -69,7 +57,8 @@ def main():
     blink = "" if STATIC else '<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.5;0.5;1" dur="1.1s" repeatCount="indefinite"/>'
     parts.append(f'<g{hidden}><text x="{X}" y="{y}" font-size="13"><tspan fill="{NEON}">{USER}</tspan>'
                  f'<tspan fill="{TEXT}"> ~ $ </tspan></text>'
-                 f'<rect x="{X + 8 * 18.6:.1f}" y="{y - 11}" width="8" height="14" fill="{NEON}">{blink}</rect>{a}</g>')
+                 f'<rect x="{X + 8 * 18.6:.1f}" y="{y - 11}" width="8" height="14" fill="{NEON}">{blink}</rect>'
+                 f'<text x="{X + 8 * 18.6 + 18:.1f}" y="{y}" font-size="12" fill="{MUTED}">← click to open the live terminal</text>{a}</g>')
     OUT.write_text(window(WIDTH, HEIGHT, "~/neofetch", "\n".join(parts)), encoding="utf-8")
     print(f"wrote {OUT.name}")
 

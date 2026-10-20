@@ -34,6 +34,8 @@ def ascii_rows():
 
 def main():
     rows = ascii_rows()
+    # the live terminal (docs/) prints the same art for `neofetch` and `banner`
+    (ROOT / "docs" / "spider.txt").write_text("\n".join(rows) + "\n", encoding="utf-8")
     block_w = COLS * CHAR_W
     x0 = (WIDTH - block_w) / 2
     y0 = 28 + (HEIGHT - 28 - 30 - len(rows) * LINE_H) / 2
