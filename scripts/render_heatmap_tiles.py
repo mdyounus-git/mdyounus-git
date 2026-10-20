@@ -102,8 +102,11 @@ def tooltip(d):
     return f"{what} on {when}"
 
 
-def main(link):
-    """Write the tiles into hm/ and return the README markup for the whole heatmap."""
+def main(wrap):
+    """Write the tiles into hm/ and return the README markup for the whole heatmap.
+
+    wrap is the opening tag put around each tile: an <a name> anchor, so a click does
+    nothing while the hover title still shows."""
     data, weeks, top_n = load()
     cols = GUTTER + len(weeks) + 1
     width = cols * U
@@ -124,11 +127,9 @@ def main(link):
     # floor to 3 decimals so a full row never adds up to more than 100% and spills over
     pct = int(100_000 / cols) / 1000
     total = f"{pct * cols:.3f}%"
-    href = html.escape(link, quote=True)
-
     def img(name, width, title=""):
         t = html.escape(title, quote=True)
-        return (f'<a href="{href}"><img src="./hm/{name}" width="{width}" align="top" '
+        return (f'{wrap}<img src="./hm/{name}" width="{width}" align="top" '
                 f'alt="{t}" title="{t}" /></a>')
 
     grid = {}
@@ -149,4 +150,4 @@ def main(link):
 
 
 if __name__ == "__main__":
-    main("https://mdyounus-git.github.io/mdyounus-git/?cmd=stats")
+    main('<a name="heatmap">')

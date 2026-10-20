@@ -31,14 +31,16 @@ its count, e.g. *"3 contributions on Mon, 05 Oct 2026"*. Its files live in `hm/`
 
 ## Where clicks go
 
-Every block on the profile is a link to the **live terminal**
-(https://mdyounus-git.github.io/mdyounus-git/), which runs on GitHub Pages. Each build first
-checks that the page really loads. If it doesn't (Pages switched off, or the site is
-broken), the links go to this repo instead, so a click never lands on a 404. As soon as
-the page works again, the next run switches the links back by itself.
+Nowhere, except the social buttons. Clicking the portrait, the info card, the heatmap,
+the toolbox or the radars does nothing (hovering a heatmap day still shows its count).
+GitHub normally makes every README image open its file when clicked; the build stops that
+by wrapping each image in an `<a name="...">` anchor that goes nowhere.
 
-To turn the live terminal on: repo **Settings → Pages → Build and deployment → Source:
-Deploy from a branch → Branch: `main`, folder `/docs` → Save**.
+Instagram, LinkedIn, Portfolio and Twitter open their links from `socials`. A button whose
+link is `""` is not clickable until you fill it in.
+
+(The live terminal page in `docs/` still exists for anyone who opens it directly; turn it on
+under **Settings → Pages → Branch `main`, folder `/docs`**. Nothing on the profile links to it.)
 
 ## If something is wrong
 
