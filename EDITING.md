@@ -29,6 +29,17 @@ is not a spider any more, change `portrait_title` and `portrait_caption` to matc
 The contribution heatmap is built from one small image per day, so hovering any day shows
 its count, e.g. *"3 contributions on Mon, 05 Oct 2026"*. Its files live in `hm/`.
 
+## Where clicks go
+
+Every block on the profile is a link to the **live terminal**
+(https://mdyounus-git.github.io/mdyounus-git/), which runs on GitHub Pages. Each build first
+checks that the page really loads. If it doesn't (Pages switched off, or the site is
+broken), the links go to this repo instead, so a click never lands on a 404. As soon as
+the page works again, the next run switches the links back by itself.
+
+To turn the live terminal on: repo **Settings → Pages → Build and deployment → Source:
+Deploy from a branch → Branch: `main`, folder `/docs` → Save**.
+
 ## If something is wrong
 
 The build checks `profile.json` before drawing anything. A typo, such as a missing comma, a
