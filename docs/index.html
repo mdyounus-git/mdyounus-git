@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>younus@github — terminal</title>
+<title>terminal</title>
 <meta name="description" content="Interactive terminal profile of Mohammed Younus M, Cybersecurity Engineering student. Type help.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230d1117'/%3E%3Ctext x='3' y='12' font-size='10' font-family='monospace' fill='%2339d353'%3E%3E_%3C/text%3E%3C/svg%3E">
 <style>
@@ -55,11 +55,11 @@
 </head>
 <body>
 <main class="term" aria-label="Interactive terminal">
-  <div class="bar"><span class="dot" style="background:#ff5f56"></span><span class="dot" style="background:#ffbd2e"></span><span class="dot" style="background:#27c93f"></span><span class="title">younus@github: ~</span></div>
+  <div class="bar"><span class="dot" style="background:#ff5f56"></span><span class="dot" style="background:#ffbd2e"></span><span class="dot" style="background:#27c93f"></span><span class="title" id="wintitle">~</span></div>
   <nav class="chips" id="chips" aria-label="Quick commands"></nav>
   <div class="screen" id="screen" role="log" aria-live="polite">
     <div id="out"></div>
-    <label class="input-row" for="cmd"><span><span class="prompt">younus@github</span>:<span class="path">~</span>$</span><input id="cmd" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type a command"></label>
+    <label class="input-row" for="cmd"><span><span class="prompt" id="ps1">guest@github</span>:<span class="path">~</span>$</span><input id="cmd" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type a command"></label>
   </div>
 </main>
 <script>
@@ -67,7 +67,7 @@
   const out = document.getElementById("out");
   const input = document.getElementById("cmd");
   const screen = document.getElementById("screen");
-  const RAW = "https://raw.githubusercontent.com/mdyounus-git/mdyounus-git/main/data/contributions.json";
+  let RAW = "", USER = "guest@github";
   const PALETTE = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353", "#69f0a0"];
   let P = null, ART = "", history = [], hpos = 0, queue = Promise.resolve();
   const submit = v => (queue = queue.then(() => run(v)));  // one command at a time, in order
@@ -121,7 +121,7 @@
     hobbies: { d: "what I do for fun", f: () => list(P.hobbies) },
     education: { d: "where I study", f() { kv("Degree", P.role); kv("College", P.uni); kv("Location", P.location); } },
     contact: { d: "find me elsewhere", f() {
-      for (const [n, u] of Object.entries(P.socials)) print([n.padEnd(11), "k"], [u.replace("https://", ""), "a", u]);
+      for (const [n, u] of Object.entries(P.socials)) print([n.padEnd(11), "k"], u ? [u.replace("https://", ""), "a", u] : ["coming soon", "m"]);
     }},
     socials: { d: "same as contact", hidden: true, f: () => C.contact.f() },
     neofetch: { d: "system info, spider edition", f() {
@@ -154,6 +154,7 @@
     }},
     github: { d: "open my GitHub profile", f: () => open1("GitHub") },
     linkedin: { d: "open my LinkedIn", f: () => open1("LinkedIn") },
+    portfolio: { d: "open my portfolio", f: () => open1("Portfolio") },
     instagram: { d: "open my Instagram", hidden: true, f: () => open1("Instagram") },
     ls: { d: "list files", f: () => print(...FILES.flatMap(n => [[n, "c"], "  "])) },
     cat: { d: "read a file, e.g. cat skills.txt", hidden: true, f(args) {
@@ -166,19 +167,19 @@
     history: { d: "commands you have run", f: () => history.forEach((h, i) => print([String(i + 1).padStart(4) + "  ", "m"], h)) },
     date: { d: "current date and time", f: () => print(new Date().toString()) },
     echo: { d: "print text", hidden: true, f: args => print(args.join(" ")) },
-    pwd: { d: "where am I", hidden: true, f: () => print("/home/younus") },
+    pwd: { d: "where am I", hidden: true, f: () => print("/home/" + P.handle) },
     clear: { d: "clear the screen", f: () => { out.textContent = ""; } },
-    sudo: { d: "", hidden: true, f: () => print(["younus is not in the sudoers file. This incident will be reported. 🕷️", "r"]) },
+    sudo: { d: "", hidden: true, f: () => print([P.handle + " is not in the sudoers file. This incident will be reported. 🕷️", "r"]) },
     rm: { d: "", hidden: true, f: () => print(["nice try. this terminal is read-only.", "r"]) },
     exit: { d: "", hidden: true, f: () => print(["there is no escape from the web. 🕸️", "p"]) },
   };
   const FILES = ["whoami.txt", "skills.txt", "tools.txt", "interests.txt", "hobbies.txt", "education.txt", "contact.txt"];
-  function open1(name) { const u = P.socials[name]; print(["opening " + u + " …", "m"]); window.open(u, "_blank", "noopener"); }
+  function open1(name) { const u = P.socials[name]; if (!u) return print([name + " link coming soon", "m"]); print(["opening " + u + " …", "m"]); window.open(u, "_blank", "noopener"); }
 
   // ---------- input loop ----------
   async function run(raw) {
     const line = raw.trim();
-    print(["younus@github", "prompt"], ":", ["~", "path"], "$ ", line);
+    print([USER, "prompt"], ":", ["~", "path"], "$ ", line);
     if (!line) return;
     history.push(line); hpos = history.length;
     const [name, ...args] = line.split(/\s+/);
@@ -199,7 +200,7 @@
       const word = rest.length ? rest[rest.length - 1] : n;
       const hits = pool.filter(k => k.startsWith(word));
       if (hits.length === 1) input.value = rest.length ? [n, ...rest.slice(0, -1), hits[0]].join(" ") : hits[0] + " ";
-      else if (hits.length > 1) { print(["younus@github", "prompt"], ":", ["~", "path"], "$ ", input.value); print([hits.join("   "), "c"]); }
+      else if (hits.length > 1) { print([USER, "prompt"], ":", ["~", "path"], "$ ", input.value); print([hits.join("   "), "c"]); }
     }
     else if (e.key === "l" && e.ctrlKey) { e.preventDefault(); C.clear.f(); }
   });
@@ -214,10 +215,17 @@
 
   // ---------- boot ----------
   Promise.all([
-    fetch("profile.json").then(r => r.json()),
+    fetch("profile.live.json").then(r => { if (!r.ok) throw 0; return r.json(); }).catch(() => fetch("profile.json").then(r => r.json())),
     fetch("spider.txt").then(r => r.text()).catch(() => ""),
   ]).then(async ([p, art]) => {
-    P = p; ART = art.replace(/\s+$/, "");
+    P = Object.assign({ name: "", handle: "guest", github: "", role: "", uni: "", location: "", about: [],
+                        interests: [], tools: [], hobbies: [], skills: {}, socials: {}, card: [], radar: {} }, p);
+    ART = art.replace(/\s+$/, "");
+    USER = P.handle + "@github";
+    RAW = "https://raw.githubusercontent.com/" + P.github + "/" + P.github + "/main/data/contributions.json";
+    document.title = USER + " — terminal";
+    document.getElementById("wintitle").textContent = USER + ": ~";
+    document.getElementById("ps1").textContent = USER;
     print(["Welcome to " + P.handle + "'s terminal. ", "m"], "Type ", ["help", "c"], " or click a command above.");
     blank();
     const first = new URLSearchParams(location.search).get("cmd");

@@ -60,7 +60,9 @@
   "socials": {
     "GitHub": "https://github.com/mdyounus-git",
     "LinkedIn": "https://www.linkedin.com/in/mdyounusm",
-    "Instagram": "https://instagram.com/mdyounus_28"
+    "Instagram": "https://instagram.com/mdyounus_28",
+    "Portfolio": "",
+    "Twitter": ""
   },
   "card": [
     [
@@ -194,5 +196,45 @@
         ]
       ]
     }
+  },
+  "buttons": [
+    "Instagram",
+    "LinkedIn",
+    "Portfolio",
+    "Twitter"
+  ],
+  "toolbox": {
+    "title": "~/arsenal",
+    "heading": "SOC · Blue Team · Incident Response toolkit",
+    "rows": [
+      {
+        "label": "detect & monitor",
+        "tools": [
+          "Splunk",
+          "Sentinel",
+          "Elastic",
+          "Wazuh",
+          "Suricata",
+          "Zeek",
+          "Snort",
+          "Wireshark",
+          "ATT&CK"
+        ]
+      },
+      {
+        "label": "investigate & respond",
+        "tools": [
+          "Autopsy",
+          "Volatility",
+          "Velociraptor",
+          "YARA",
+          "CyberChef",
+          "VirusTotal",
+          "Nmap",
+          "Burp Suite",
+          "Metasploit"
+        ]
+      }
+    ]
   }
 }

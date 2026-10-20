@@ -1,0 +1,240 @@
+{
+ "name": "Mohammed Younus M",
+ "handle": "younus",
+ "github": "mdyounus-git",
+ "role": "Cybersecurity Engineering student",
+ "uni": "Sri Siddhartha Institute of Technology",
+ "location": "Tumkur, Karnataka, India",
+ "since": "Nov 2024",
+ "about": [
+  "Cybersecurity Engineering student passionate about Security Operations,",
+  "Threat Detection, Network Security and Secure Software Development.",
+  "I build cybersecurity projects, solve Capture The Flag challenges and",
+  "explore defensive security techniques through hands-on practice.",
+  "Always learning, building, and contributing to practical security solutions."
+ ],
+ "interests": [
+  "SOC Operations",
+  "Threat Detection",
+  "Incident Response",
+  "Network Security",
+  "Secure Software Development",
+  "AI for Cybersecurity"
+ ],
+ "skills": {
+  "Security": [
+   "Blue Team / SOC operations",
+   "Incident Response",
+   "Threat Detection & hunting",
+   "Network Security",
+   "Digital Forensics",
+   "Penetration Testing (certified)",
+   "Secure Coding"
+  ],
+  "Infrastructure": [
+   "Networking",
+   "Operating Systems (Linux, Windows)",
+   "Bash",
+   "Cloud (AWS)",
+   "Active Directory"
+  ],
+  "Scripting": [
+   "Python",
+   "PowerShell",
+   "Bash"
+  ]
+ },
+ "tools": [
+  "Kali Linux",
+  "Cisco Packet Tracer",
+  "AWS",
+  "Windows Terminal",
+  "PowerShell",
+  "Jira"
+ ],
+ "hobbies": [
+  "Capture The Flag: web, forensics, Active Directory",
+  "Building cybersecurity projects",
+  "Hands-on defensive security labs"
+ ],
+ "socials": {
+  "GitHub": "https://github.com/mdyounus-git",
+  "LinkedIn": "https://www.linkedin.com/in/mdyounusm",
+  "Instagram": "https://instagram.com/mdyounus_28",
+  "Portfolio": "",
+  "Twitter": ""
+ },
+ "card": [
+  [
+   "Name",
+   "Mohammed Younus M"
+  ],
+  [
+   "Role",
+   "Cybersecurity Engineering student"
+  ],
+  [
+   "Uni",
+   "Sri Siddhartha Institute of Technology"
+  ],
+  [
+   "Home",
+   "Tumkur, Karnataka, India"
+  ],
+  [
+   "Focus",
+   "SOC · Threat Detection · Incident Response"
+  ],
+  [
+   "Also",
+   "Network Security · Secure Coding · AI for Security"
+  ],
+  [
+   "Strong",
+   "Networking · Operating Systems · Bash · Cloud"
+  ],
+  [
+   "Script",
+   "Python · PowerShell · Bash"
+  ],
+  [
+   "Infra",
+   "Active Directory · Linux · Windows · AWS"
+  ],
+  [
+   "Tools",
+   "Kali Linux · Cisco Packet Tracer · AWS · Jira"
+  ],
+  [
+   "Hobby",
+   "Capture The Flag — web, forensics, AD"
+  ],
+  [
+   "Uptime",
+   "on GitHub since Nov 2024"
+  ],
+  [
+   "Status",
+   "always learning, building, breaking (legally)"
+  ]
+ ],
+ "radar": {
+  "tech": {
+   "title": "~/skills/tech.radar",
+   "caption": "strongest: networking · OS · bash · cloud",
+   "axes": [
+    [
+     "Networking",
+     90,
+     ""
+    ],
+    [
+     "Operating Systems",
+     88,
+     ""
+    ],
+    [
+     "Bash",
+     85,
+     ""
+    ],
+    [
+     "Cloud",
+     82,
+     ""
+    ],
+    [
+     "Python",
+     72,
+     ""
+    ],
+    [
+     "PowerShell",
+     75,
+     ""
+    ],
+    [
+     "Active Directory",
+     74,
+     ""
+    ]
+   ]
+  },
+  "security": {
+   "title": "~/skills/security.radar",
+   "caption": "focus: DEFENSIVE / blue team  ·  pentest certified",
+   "axes": [
+    [
+     "SOC / Blue Team",
+     90,
+     "def"
+    ],
+    [
+     "Incident Response",
+     88,
+     "def"
+    ],
+    [
+     "Threat Detection",
+     85,
+     "def"
+    ],
+    [
+     "Forensics",
+     75,
+     "def"
+    ],
+    [
+     "Pentest",
+     68,
+     "off"
+    ],
+    [
+     "Network Security",
+     82,
+     "def"
+    ]
+   ]
+  }
+ },
+ "buttons": [
+  "Instagram",
+  "LinkedIn",
+  "Portfolio",
+  "Twitter"
+ ],
+ "toolbox": {
+  "title": "~/arsenal",
+  "heading": "SOC · Blue Team · Incident Response toolkit",
+  "rows": [
+   {
+    "label": "detect & monitor",
+    "tools": [
+     "Splunk",
+     "Sentinel",
+     "Elastic",
+     "Wazuh",
+     "Suricata",
+     "Zeek",
+     "Snort",
+     "Wireshark",
+     "ATT&CK"
+    ]
+   },
+   {
+    "label": "investigate & respond",
+    "tools": [
+     "Autopsy",
+     "Volatility",
+     "Velociraptor",
+     "YARA",
+     "CyberChef",
+     "VirusTotal",
+     "Nmap",
+     "Burp Suite",
+     "Metasploit"
+    ]
+   }
+  ]
+ }
+}

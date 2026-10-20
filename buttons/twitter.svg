@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="151" height="40" viewBox="0 0 151 40" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace">
+<rect x="0.5" y="0.5" width="150" height="39" rx="8" fill="#0d1117" stroke="#30363d"/>
+<g transform="translate(16 12.0)"><g transform="scale(0.6667)"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" fill="#f0f6fc"/></g></g>
+<text x="42" y="24.5" font-size="13" font-weight="bold" fill="#c9d1d9">Twitter</text>
+<text x="135" y="24.5" font-size="13" fill="#8b949e" text-anchor="end">↗</text>
+<line x1="12" y1="36" x2="12" y2="36" stroke="#39d353" stroke-width="2" stroke-linecap="round">
+<animate attributeName="x2" from="12" to="139" begin="0.4s" dur="0.9s" calcMode="spline" keySplines="0.2 0.8 0.2 1" fill="freeze"/></line>
+</svg>

@@ -1,42 +1,65 @@
-"""Turn the spider avatar into an ASCII-art SVG whose rows type themselves in once, then freeze.
+"""Turn the GitHub avatar into an ASCII-art SVG whose rows type themselves in once, then freeze.
 
-Run once (needs pillow + numpy):  python scripts/make_ascii_svg.py
+build.py downloads the current avatar into scripts/source-avatar.jpg first, so a new
+profile picture shows up here by itself. Works for any picture: dark or light
+background, logo or photo, square or tall (needs pillow + numpy).
 """
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageOps
 
 from theme import GREEN, NEON, ROOT, esc, window
 
 SRC = ROOT / "scripts" / "source-avatar.jpg"
 OUT = ROOT / "spider-ascii.svg"
 
-RAMP = " .`:-=+*cs#%@"  # sparse -> dense; the spider is bright, so bright maps to dense
+RAMP = " .`:-=+*cs#%@"  # sparse -> dense; the subject is made bright, so bright maps to dense
 COLS = 52
 CHAR_W, LINE_H = 6.2, 10.6  # monospace cell; height/width ~1.7
 WIDTH, HEIGHT = 370, 460
+MAX_ROWS = int((HEIGHT - 28 - 30 - 8) / LINE_H)  # what fits above the caption
+CAPTION = "with great power comes great responsibility"
 ROW_DUR, ROW_GAP, START = 0.28, 0.07, 0.4
 
 
 def ascii_rows():
-    img = Image.open(SRC).convert("L")
+    """Return (rows of text, column count)."""
+    img = ImageOps.exif_transpose(Image.open(SRC)).convert("L")
     a = np.asarray(img, dtype=np.float32) / 255.0
-    ys, xs = np.where(a > 0.35)
-    pad = 10
-    box = (max(xs.min() - pad, 0), max(ys.min() - pad, 0),
-           min(xs.max() + pad, a.shape[1]), min(ys.max() + pad, a.shape[0]))
-    crop = img.crop(box)
-    rows = round(COLS * crop.height / crop.width * CHAR_W / LINE_H)
-    small = np.asarray(crop.resize((COLS, rows), Image.LANCZOS), dtype=np.float32) / 255.0
-    idx = np.clip((small * (len(RAMP) - 1)).round().astype(int), 0, len(RAMP) - 1)
-    return ["".join(RAMP[i] for i in row).rstrip() for row in idx]
+    # the background is whatever the border mostly is; flip so the subject is bright on dark
+    border = np.concatenate([a[0], a[-1], a[:, 0], a[:, -1]])
+    bg = float(np.median(border))
+    if bg > 0.5:
+        a, bg = 1.0 - a, 1.0 - bg
+    ys, xs = np.where(np.abs(a - bg) > 0.25)
+    if len(xs) < a.size * 0.01:          # nothing stands out: use the whole picture
+        x0, y0, x1, y1 = 0, 0, a.shape[1], a.shape[0]
+    else:
+        pad = int(0.03 * max(a.shape))
+        x0, y0 = max(xs.min() - pad, 0), max(ys.min() - pad, 0)
+        x1, y1 = min(xs.max() + pad + 1, a.shape[1]), min(ys.max() + pad + 1, a.shape[0])
+    crop = a[y0:y1, x0:x1]
+    lo, hi = np.percentile(crop, 2), np.percentile(crop, 98)
+    crop = np.clip((crop - lo) / max(hi - lo, 1e-3), 0, 1)   # stretch contrast for dull photos
+    h, w = crop.shape
+    cols = COLS
+    rows = max(1, round(cols * h / w * CHAR_W / LINE_H))
+    if rows > MAX_ROWS:                  # tall picture: keep the height, narrow the width
+        rows = MAX_ROWS
+        cols = max(12, round(rows * w / h * LINE_H / CHAR_W))
+    small = Image.fromarray((crop * 255).astype(np.uint8)).resize((cols, rows), Image.LANCZOS)
+    v = np.asarray(small, dtype=np.float32) / 255.0
+    idx = np.clip((v * (len(RAMP) - 1)).round().astype(int), 0, len(RAMP) - 1)
+    return ["".join(RAMP[i] for i in row).rstrip() for row in idx], cols
 
 
 def main():
-    rows = ascii_rows()
+    from profile import load
+    caption = load().get("portrait_caption", CAPTION)
+    rows, cols = ascii_rows()
     # the live terminal (docs/) prints the same art for `neofetch` and `banner`
     (ROOT / "docs" / "spider.txt").write_text("\n".join(rows) + "\n", encoding="utf-8")
-    block_w = COLS * CHAR_W
+    block_w = cols * CHAR_W
     x0 = (WIDTH - block_w) / 2
     y0 = 28 + (HEIGHT - 28 - 30 - len(rows) * LINE_H) / 2
     parts = ["<defs>"]
@@ -65,10 +88,10 @@ def main():
     done = START + len(rows) * ROW_GAP + ROW_DUR
     parts.append(
         f'<text x="{WIDTH / 2}" y="{HEIGHT - 16}" font-size="11" fill="#8b949e" text-anchor="middle" opacity="0">'
-        f'with great power comes great responsibility'
+        f'{esc(caption)}'
         f'<animate attributeName="opacity" from="0" to="1" begin="{done:.2f}s" dur="0.8s" fill="freeze"/></text>')
     OUT.write_text(window(WIDTH, HEIGHT, "~/spider.txt", "\n".join(parts)), encoding="utf-8")
-    print(f"wrote {OUT.name}: {len(rows)} rows x {COLS} cols")
+    print(f"wrote {OUT.name}: {len(rows)} rows x {cols} cols")
 
 
 if __name__ == "__main__":

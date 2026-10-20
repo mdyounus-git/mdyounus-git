@@ -1,3 +1,0 @@
-# portrait only, not needed by the daily workflow
-pillow
-numpy

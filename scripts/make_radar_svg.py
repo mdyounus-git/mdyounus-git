@@ -1,11 +1,10 @@
-"""Two animated radar (spider) charts from the "radar" block in docs/profile.json:
-tech on the left, security on the right. The shape grows out of the centre once,
+"""Animated radar (spider) charts, one per entry in the "radar" block of docs/profile.json
+(the profile shows the first on the left, the second on the right). The shape grows out of the centre once,
 then the glowing points keep a slow pulse.
 
-python scripts/make_radar_svg.py   ->  radar-tech.svg, radar-security.svg
+python scripts/make_radar_svg.py   ->  radar-<name>.svg for each chart
 """
 
-import json
 import math
 
 from theme import BORDER, GREEN, MUTED, NEON, ROOT, TEXT, esc, window
@@ -87,7 +86,8 @@ def radar(spec):
 
 
 def main():
-    data = json.loads((ROOT / "docs" / "profile.json").read_text(encoding="utf-8"))["radar"]
+    from profile import load
+    data = load()["radar"]
     for key in data:
         out = ROOT / f"radar-{key}.svg"
         out.write_text(radar(data[key]), encoding="utf-8")

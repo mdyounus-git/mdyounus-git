@@ -1,4 +1,8 @@
-"""Scrape the public contribution calendar (no token needed) into data/contributions.json."""
+"""Scrape the public contribution calendar (no token needed) into data/contributions.json.
+
+If the page looks wrong (GitHub down or its HTML changed), this fails WITHOUT touching the
+old file, so the heatmap keeps the last good data instead of turning blank.
+"""
 
 import json
 import re
@@ -9,13 +13,21 @@ from bs4 import BeautifulSoup
 
 from theme import ROOT
 
-USER = "mdyounus-git"
 OUT = ROOT / "data" / "contributions.json"
 
 
+class FetchError(Exception):
+    pass
+
+
 def main():
-    html = requests.get(f"https://github.com/users/{USER}/contributions", timeout=30,
-                        headers={"User-Agent": "profile-readme-bot"}).text
+    from profile import load
+    USER = load()["github"]
+    resp = requests.get(f"https://github.com/users/{USER}/contributions", timeout=30,
+                        headers={"User-Agent": "profile-readme-bot"})
+    if resp.status_code != 200:
+        raise FetchError(f"GitHub answered {resp.status_code} for {USER}'s contributions")
+    html = resp.text
     soup = BeautifulSoup(html, "html.parser")
     tips = {t.get("for"): t.get_text(" ", strip=True) for t in soup.find_all("tool-tip")}
     days = []
@@ -25,6 +37,8 @@ def main():
         days.append({"date": td["data-date"], "level": int(td.get("data-level", 0)),
                      "count": int(m.group(1).replace(",", "")) if m else 0})
     days.sort(key=lambda d: d["date"])
+    if len(days) < 300:
+        raise FetchError(f"only {len(days)} days found on the contributions page (expected ~365); GitHub may have changed it")
 
     longest = run = 0
     for d in days:
