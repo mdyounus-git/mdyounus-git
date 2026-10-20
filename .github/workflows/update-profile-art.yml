@@ -21,7 +21,9 @@ jobs:
       - run: pip install -r scripts/requirements.txt
       - run: python scripts/fetch_contributions.py
       - run: python scripts/render_heatmap_svg.py
+      - run: python scripts/make_info_card.py   # picks up edits to docs/profile.json
+      - run: python scripts/make_radar_svg.py
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: refresh contribution graph [skip ci]"
-          file_pattern: "data/contributions.json contrib-heatmap.svg"
+          commit_message: "chore: refresh profile art [skip ci]"
+          file_pattern: "data/contributions.json contrib-heatmap.svg info-card.svg radar-*.svg"

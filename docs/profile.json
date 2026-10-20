@@ -14,16 +14,49 @@
     "Always learning, building, and contributing to practical security solutions."
   ],
   "interests": [
-    "SOC Operations", "Threat Detection", "Incident Response", "Network Security",
-    "Secure Software Development", "AI for Cybersecurity"
+    "SOC Operations",
+    "Threat Detection",
+    "Incident Response",
+    "Network Security",
+    "Secure Software Development",
+    "AI for Cybersecurity"
   ],
   "skills": {
-    "Security": ["Security Operations (SOC)", "Threat Detection", "Incident Response", "Network Security", "Secure Coding", "CTF problem solving"],
-    "Languages": ["Python", "C", "Go", "PHP", "PowerShell", "AssemblyScript"],
-    "Web": ["HTML5", "CSS3"],
-    "Systems": ["Linux", "Kali Linux", "Windows"]
+    "Security": [
+      "Blue Team / SOC operations",
+      "Incident Response",
+      "Threat Detection & hunting",
+      "Network Security",
+      "Digital Forensics",
+      "Penetration Testing (certified)",
+      "Secure Coding"
+    ],
+    "Languages": [
+      "Python",
+      "C",
+      "Go",
+      "PHP",
+      "PowerShell",
+      "AssemblyScript"
+    ],
+    "Web": [
+      "HTML5",
+      "CSS3"
+    ],
+    "Systems": [
+      "Linux",
+      "Kali Linux",
+      "Windows"
+    ]
   },
-  "tools": ["Kali Linux", "Cisco Packet Tracer", "Windows Terminal", "PowerShell", "AWS", "Jira"],
+  "tools": [
+    "Kali Linux",
+    "Cisco Packet Tracer",
+    "Windows Terminal",
+    "PowerShell",
+    "AWS",
+    "Jira"
+  ],
   "hobbies": [
     "Capture The Flag: web, forensics, Active Directory",
     "Building cybersecurity projects",
@@ -35,18 +68,131 @@
     "Instagram": "https://instagram.com/mdyounus_28"
   },
   "card": [
-    ["Name", "Mohammed Younus M"],
-    ["Role", "Cybersecurity Engineering student"],
-    ["Uni", "Sri Siddhartha Institute of Technology"],
-    ["Home", "Tumkur, Karnataka, India"],
-    ["Focus", "SOC · Threat Detection · Incident Response"],
-    ["Also", "Network Security · Secure Coding · AI for Security"],
-    ["Langs", "Python · C · Go · PHP · PowerShell"],
-    ["", "AssemblyScript · HTML5 · CSS3"],
-    ["Tools", "Kali Linux · Cisco Packet Tracer · AWS · Jira"],
-    ["", "Linux · Windows Terminal"],
-    ["Hobby", "Capture The Flag — web, forensics, AD"],
-    ["Uptime", "on GitHub since Nov 2024"],
-    ["Status", "always learning, building, breaking (legally)"]
-  ]
+    [
+      "Name",
+      "Mohammed Younus M"
+    ],
+    [
+      "Role",
+      "Cybersecurity Engineering student"
+    ],
+    [
+      "Uni",
+      "Sri Siddhartha Institute of Technology"
+    ],
+    [
+      "Home",
+      "Tumkur, Karnataka, India"
+    ],
+    [
+      "Focus",
+      "SOC · Threat Detection · Incident Response"
+    ],
+    [
+      "Also",
+      "Network Security · Secure Coding · AI for Security"
+    ],
+    [
+      "Langs",
+      "Python · C · Go · PHP · PowerShell"
+    ],
+    [
+      "",
+      "AssemblyScript · HTML5 · CSS3"
+    ],
+    [
+      "Tools",
+      "Kali Linux · Cisco Packet Tracer · AWS · Jira"
+    ],
+    [
+      "",
+      "Linux · Windows Terminal"
+    ],
+    [
+      "Hobby",
+      "Capture The Flag — web, forensics, AD"
+    ],
+    [
+      "Uptime",
+      "on GitHub since Nov 2024"
+    ],
+    [
+      "Status",
+      "always learning, building, breaking (legally)"
+    ]
+  ],
+  "radar": {
+    "security": {
+      "title": "~/skills/security.radar",
+      "caption": "focus: DEFENSIVE / blue team  ·  pentest certified",
+      "axes": [
+        [
+          "SOC / Blue Team",
+          90,
+          "def"
+        ],
+        [
+          "Incident Response",
+          88,
+          "def"
+        ],
+        [
+          "Threat Detection",
+          85,
+          "def"
+        ],
+        [
+          "Forensics",
+          75,
+          "def"
+        ],
+        [
+          "Pentest",
+          68,
+          "off"
+        ],
+        [
+          "Network Security",
+          82,
+          "def"
+        ]
+      ]
+    },
+    "programming": {
+      "title": "~/skills/programming.radar",
+      "caption": "builds security tooling, labs and apps",
+      "axes": [
+        [
+          "Python",
+          85,
+          ""
+        ],
+        [
+          "C",
+          70,
+          ""
+        ],
+        [
+          "Web HTML/CSS/PHP",
+          72,
+          ""
+        ],
+        [
+          "Java / Android",
+          60,
+          ""
+        ],
+        [
+          "Go",
+          55,
+          ""
+        ],
+        [
+          "PowerShell",
+          72,
+          ""
+        ]
+      ]
+    }
+  }
 }

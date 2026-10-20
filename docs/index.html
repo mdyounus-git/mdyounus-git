@@ -107,6 +107,16 @@
       }
     }},
     tools: { d: "tools and platforms I use", f: () => list(P.tools) },
+    levels: { d: "skill levels, as bars (the radar charts)", f() {
+      for (const [k, spec] of Object.entries(P.radar)) {
+        print([k[0].toUpperCase() + k.slice(1), "y"]);
+        for (const [name, v, side] of spec.axes) {
+          const n = Math.round(v / 5);
+          print(["  " + name.padEnd(20), side === "off" ? "p" : "k"], [("█".repeat(n) + "░".repeat(20 - n)), side === "off" ? "p" : "k"], ["  " + v, "m"]);
+        }
+        print(["  " + spec.caption, "m"]); blank();
+      }
+    }},
     interests: { d: "areas of cybersecurity I focus on", f: () => list(P.interests) },
     hobbies: { d: "what I do for fun", f: () => list(P.hobbies) },
     education: { d: "where I study", f() { kv("Degree", P.role); kv("College", P.uni); kv("Location", P.location); } },
@@ -196,7 +206,7 @@
   screen.addEventListener("click", () => { if (!getSelection().toString()) input.focus(); });
 
   const chips = document.getElementById("chips");
-  ["help", "whoami", "skills", "tools", "hobbies", "neofetch", "stats", "contact", "clear"].forEach(n => {
+  ["help", "whoami", "skills", "levels", "tools", "hobbies", "neofetch", "stats", "contact", "clear"].forEach(n => {
     const b = el("button", null, n); b.type = "button";
     b.addEventListener("click", () => { submit(n); input.focus(); });
     chips.append(b);
