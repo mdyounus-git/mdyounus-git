@@ -57,6 +57,7 @@ def check(d):
         _str(errs, d, key, "profile")
     _str(errs, d, "since", "profile", required=False)
     _str(errs, d, "portrait_caption", "profile", required=False, max_len=50)
+    _str(errs, d, "portrait_title", "profile", required=False, max_len=40)
     if isinstance(d.get("handle"), str) and not d["handle"].replace("-", "").replace("_", "").isalnum():
         errs.append('profile: "handle" should be one word (letters, numbers, - or _), it is shown as handle@github')
     _str_list(errs, d.get("about"), '"about"')

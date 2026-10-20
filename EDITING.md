@@ -18,9 +18,16 @@ your edits would be overwritten.
 | `socials` + `buttons` | the buttons at the bottom. Put a link in `socials` (e.g. `"Portfolio": "https://..."`) and the button becomes clickable. `""` shows the button without a link |
 | `skills`, `tools`, `hobbies`, `interests`, `about` | what the live terminal prints for those commands |
 | `portrait_caption` (optional) | the line under the ASCII portrait |
+| `portrait_title` (optional) | the title bar of the portrait window, e.g. `"~/spider.txt"` (default `"~/avatar.txt"`) |
 
 Your **profile picture** is picked up by itself: change it on GitHub and the ASCII portrait
-is redrawn on the next run (daily, or after any edit).
+is redrawn from the new picture on the next run (every 3 hours, or after any edit; to see it
+at once, open **Actions → Update profile art → Run workflow**). Any picture works: a photo
+or a logo, light or dark background, transparent PNG, GIF, square or not. If the new picture
+is not a spider any more, change `portrait_title` and `portrait_caption` to match it.
+
+The contribution heatmap is built from one small image per day, so hovering any day shows
+its count, e.g. *"3 contributions on Mon, 05 Oct 2026"*. Its files live in `hm/`.
 
 ## If something is wrong
 
@@ -31,7 +38,8 @@ profile**: the live page keeps its last good version. GitHub emails you that the
 words what to fix and where. Fix it, commit again, and it goes through.
 
 To go back to an earlier version entirely, the tag `profile-v1` marks the profile before
-the radar charts were added.
+the radar charts were added, and `profile-v2-before-fixes` the profile before the heatmap
+hover, the new section order and the any-picture portrait.
 
 ## Running it yourself (optional)
 

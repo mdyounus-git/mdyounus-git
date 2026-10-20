@@ -1,13 +1,13 @@
 name: Update profile art
 
-# Runs daily, on demand, and on every push, so editing docs/profile.json on GitHub is
+# Runs every 3 hours (so a new profile picture shows up the same day), on demand, and on every push, so editing docs/profile.json on GitHub is
 # all it takes. scripts/build.py checks the profile first; if anything is wrong the
 # run fails with the reason in its log and NOTHING is committed, so the live profile
 # keeps its last good version.
 
 "on":
   schedule:
-    - cron: "17 6 * * *"   # ~06:17 UTC daily
+    - cron: "17 */3 * * *"   # every 3 hours at :17
   workflow_dispatch: {}
   push:
     branches: [main]
@@ -32,4 +32,4 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: refresh profile art [skip ci]"
-          file_pattern: "README.md *.svg buttons/*.svg data/contributions.json docs/profile.live.json docs/spider.txt scripts/source-avatar.jpg"
+          file_pattern: "README.md *.svg buttons/*.svg hm/*.svg data/contributions.json docs/profile.live.json docs/spider.txt scripts/source-avatar.jpg"

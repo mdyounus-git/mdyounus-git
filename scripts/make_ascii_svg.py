@@ -2,7 +2,8 @@
 
 build.py downloads the current avatar into scripts/source-avatar.jpg first, so a new
 profile picture shows up here by itself. Works for any picture: dark or light
-background, logo or photo, square or tall (needs pillow + numpy).
+background, logo or photo, square or tall, transparent PNG, GIF, 16-bit or CMYK
+(needs pillow + numpy).
 """
 
 import numpy as np
@@ -22,9 +23,39 @@ CAPTION = "with great power comes great responsibility"
 ROW_DUR, ROW_GAP, START = 0.28, 0.07, 0.4
 
 
+def flatten(img):
+    """Any picture -> plain RGB with its subject intact.
+
+    Transparent areas are filled with a colour that contrasts with the subject (the
+    pixels hidden under transparency are often the same colour as the subject, which
+    would erase it), and 16-bit / float images are scaled down to 8 bits instead of
+    being clipped to white.
+    """
+    img = ImageOps.exif_transpose(img)
+    if img.mode in ("I", "I;16", "I;16B", "I;16L", "I;16N", "F"):
+        a = np.asarray(img, dtype=np.float64)
+        lo, hi = float(a.min()), float(a.max())
+        a = (a - lo) / (hi - lo) * 255 if hi > lo else np.zeros_like(a)
+        img = Image.fromarray(a.astype(np.uint8), "L")
+    if img.mode in ("P", "PA", "LA", "La", "RGBa") or "transparency" in img.info:
+        img = img.convert("RGBA")
+    if img.mode == "RGBA":
+        alpha = np.asarray(img.getchannel("A"), dtype=np.float64) / 255.0
+        if alpha.min() < 0.98:
+            lum = np.asarray(img.convert("RGB").convert("L"), dtype=np.float64) / 255.0
+            weight = alpha.sum()
+            subject = (lum * alpha).sum() / weight if weight else 0.5
+            base = Image.new("RGB", img.size, (255, 255, 255) if subject < 0.5 else (0, 0, 0))
+            base.paste(img.convert("RGB"), mask=img.getchannel("A"))
+            return base
+    return img.convert("RGB")
+
+
 def ascii_rows():
     """Return (rows of text, column count)."""
-    img = ImageOps.exif_transpose(Image.open(SRC)).convert("L")
+    with Image.open(SRC) as im:
+        im.seek(0)  # first frame of an animated GIF
+        img = flatten(im).convert("L")
     a = np.asarray(img, dtype=np.float32) / 255.0
     # the background is whatever the border mostly is; flip so the subject is bright on dark
     border = np.concatenate([a[0], a[-1], a[:, 0], a[:, -1]])
@@ -55,7 +86,9 @@ def ascii_rows():
 
 def main():
     from profile import load
-    caption = load().get("portrait_caption", CAPTION)
+    p = load()
+    caption = p.get("portrait_caption", CAPTION)
+    title = p.get("portrait_title", "~/avatar.txt")
     rows, cols = ascii_rows()
     # the live terminal (docs/) prints the same art for `neofetch` and `banner`
     (ROOT / "docs" / "spider.txt").write_text("\n".join(rows) + "\n", encoding="utf-8")
@@ -90,7 +123,7 @@ def main():
         f'<text x="{WIDTH / 2}" y="{HEIGHT - 16}" font-size="11" fill="#8b949e" text-anchor="middle" opacity="0">'
         f'{esc(caption)}'
         f'<animate attributeName="opacity" from="0" to="1" begin="{done:.2f}s" dur="0.8s" fill="freeze"/></text>')
-    OUT.write_text(window(WIDTH, HEIGHT, "~/spider.txt", "\n".join(parts)), encoding="utf-8")
+    OUT.write_text(window(WIDTH, HEIGHT, esc(title), "\n".join(parts)), encoding="utf-8")
     print(f"wrote {OUT.name}: {len(rows)} rows x {cols} cols")
 
 

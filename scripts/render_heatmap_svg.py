@@ -17,7 +17,8 @@ def level(d, top):
     return 5 if top and d["count"] >= top else d["level"]
 
 
-def main():
+def load():
+    """Return (data, weeks, top): the days grouped into Sunday-first weeks, and the neon threshold."""
     data = json.loads(SRC.read_text(encoding="utf-8"))
     days = data["days"]
     counts = sorted((d["count"] for d in days if d["count"]), reverse=True)
@@ -31,6 +32,11 @@ def main():
         col.append(d)
     if col:
         weeks.append(col)
+    return data, weeks, top
+
+
+def main():
+    data, weeks, top = load()
 
     parts = []
     for i, name in ((1, "Mon"), (3, "Wed"), (5, "Fri")):

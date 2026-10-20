@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="40" viewBox="0 0 840 40" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace">
+<path d="M0.5 0 V29.5 a10 10 0 0 0 10 10 H829.5 a10 10 0 0 0 10 -10 V0" fill="#0d1117" stroke="#30363d"/>
+<text x="686" y="20" font-size="10" fill="#8b949e" text-anchor="end">Less</text>
+<rect x="692" y="10" width="12" height="12" rx="2.5" fill="#161b22"/>
+<rect x="707" y="10" width="12" height="12" rx="2.5" fill="#0e4429"/>
+<rect x="722" y="10" width="12" height="12" rx="2.5" fill="#006d32"/>
+<rect x="737" y="10" width="12" height="12" rx="2.5" fill="#26a641"/>
+<rect x="752" y="10" width="12" height="12" rx="2.5" fill="#39d353"/>
+<rect x="767" y="10" width="12" height="12" rx="2.5" fill="#69f0a0"/>
+<text x="786" y="20" font-size="10" fill="#8b949e">More</text>
+<text x="16" y="20" font-size="11" xml:space="preserve"><tspan fill="#39d353">total</tspan><tspan fill="#c9d1d9"> 690</tspan><tspan fill="#8b949e">   </tspan><tspan fill="#39d353">longest streak</tspan><tspan fill="#c9d1d9"> 25d</tspan><tspan fill="#8b949e">   </tspan><tspan fill="#39d353">current streak</tspan><tspan fill="#c9d1d9"> 4d</tspan><tspan fill="#8b949e">   </tspan><tspan fill="#39d353">best day</tspan><tspan fill="#c9d1d9"> 98 on Sep 20</tspan><tspan fill="#8b949e"></tspan></text>
+</svg>

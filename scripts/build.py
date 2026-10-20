@@ -41,17 +41,20 @@ def sync_avatar(user):
     """Fetch the current GitHub avatar; keep the old one if anything goes wrong."""
     import requests
     from PIL import Image
+
+    from make_ascii_svg import flatten
     dst = ROOT / "scripts" / "source-avatar.jpg"
     try:
         r = requests.get(f"https://github.com/{user}.png?size=460", timeout=30)
         r.raise_for_status()
         img = Image.open(io.BytesIO(r.content))
-        img.load()
+        img.seek(0)  # first frame of an animated GIF
+        img = flatten(img)  # transparency, palette, 16-bit... -> plain RGB with the subject kept
     except Exception as e:  # network, 404, not an image...
         warn(f"could not download the avatar ({e}); keeping the current portrait")
         return
     buf = io.BytesIO()
-    img.convert("RGB").save(buf, "JPEG", quality=92)
+    img.save(buf, "JPEG", quality=92)
     if not dst.exists() or dst.read_bytes() != buf.getvalue():
         dst.write_bytes(buf.getvalue())
         print("avatar changed: portrait will be redrawn")
@@ -61,8 +64,10 @@ def attr(s):
     return html.escape(str(s), quote=True)
 
 
-def readme(p, radars, buttons):
-    """The profile README, generated so file names and links always match the art."""
+def readme(p, radars, buttons, heatmap):
+    """The profile README, generated so file names and links always match the art.
+
+    Order: portrait + card, heatmap, toolbox, radars, then the buttons as a footer."""
     cells = "\n".join(
         f'    <td valign="top"><a href="{PAGES}?cmd=levels"><img src="./radar-{key}.svg" width="430" '
         f'alt="{attr(spec["title"].split("/")[-1].replace(".radar", ""))} radar: '
@@ -86,8 +91,8 @@ def readme(p, radars, buttons):
     <td valign="top"><a href="{PAGES}?cmd=whoami"><img src="./info-card.svg" width="490" alt="{attr(about)}. Click to open the live terminal" /></a></td>
   </tr>
 </table>
-<a href="{PAGES}?cmd=stats"><img src="./contrib-heatmap.svg" width="860" alt="Contribution heatmap for the last year, refreshed daily" /></a>
-{radar_table}{toolbox}
+{heatmap}
+{toolbox}{radar_table}
 {btns}
 
 </div>
@@ -96,7 +101,7 @@ def readme(p, radars, buttons):
 
 def check_svgs():
     bad = []
-    for f in list(ROOT.glob("*.svg")) + list((ROOT / "buttons").glob("*.svg")):
+    for f in list(ROOT.glob("*.svg")) + list((ROOT / "buttons").glob("*.svg")) + list((ROOT / "hm").glob("*.svg")):
         try:
             ET.parse(f)
         except ET.ParseError as e:
@@ -120,6 +125,7 @@ def main():
     import make_radar_svg
     import make_toolbox
     import render_heatmap_svg
+    import render_heatmap_tiles
 
     if not offline:
         sync_avatar(p["github"])
@@ -133,6 +139,7 @@ def main():
     if not (ROOT / "data" / "contributions.json").exists():
         fail("data/contributions.json is missing; run once without --offline")
     render_heatmap_svg.main()
+    heatmap = render_heatmap_tiles.main(f"{PAGES}?cmd=stats")
 
     (ROOT / "info-card.svg").write_text(make_info_card.render(p), encoding="utf-8")
     print("wrote info-card.svg")
@@ -157,7 +164,7 @@ def main():
     buttons = make_buttons.render(p)
     print(f"wrote {len(buttons)} buttons: {', '.join(n for n, _, _ in buttons)}")
 
-    (ROOT / "README.md").write_text(readme(p, p["radar"], buttons), encoding="utf-8")
+    (ROOT / "README.md").write_text(readme(p, p["radar"], buttons, heatmap), encoding="utf-8")
     # the live terminal reads this checked copy, never the file you are editing
     (ROOT / "docs" / "profile.live.json").write_text(json.dumps(p, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     print("wrote README.md and docs/profile.live.json")

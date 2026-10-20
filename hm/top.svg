@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="64" viewBox="0 0 840 64" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace">
+<path d="M0.5 64 V10.5 a10 10 0 0 1 10 -10 H829.5 a10 10 0 0 1 10 10 V64 Z" fill="#0d1117" stroke="#30363d"/>
+<path d="M1 28 V10.5 a9.5 9.5 0 0 1 9.5 -9.5 H829.5 a9.5 9.5 0 0 1 9.5 9.5 V28 Z" fill="#161b22"/>
+<line x1="0.5" y1="28" x2="839.5" y2="28" stroke="#30363d"/>
+<circle cx="18" cy="14.5" r="5" fill="#ff5f56"/><circle cx="35" cy="14.5" r="5" fill="#ffbd2e"/><circle cx="52" cy="14.5" r="5" fill="#27c93f"/>
+<text x="420.0" y="18.5" fill="#8b949e" font-size="11" text-anchor="middle">~/contributions.sh</text>
+<text x="16" y="46" font-size="12" fill="#69f0a0">690 contributions in the last year<tspan fill="#8b949e">  ·  updated 2026-10-20  ·  hover a day for its count</tspan></text>
+<text x="61.5" y="59" font-size="10" fill="#8b949e">Nov</text>
+<text x="136.5" y="59" font-size="10" fill="#8b949e">Dec</text>
+<text x="196.5" y="59" font-size="10" fill="#8b949e">Jan</text>
+<text x="256.5" y="59" font-size="10" fill="#8b949e">Feb</text>
+<text x="316.5" y="59" font-size="10" fill="#8b949e">Mar</text>
+<text x="391.5" y="59" font-size="10" fill="#8b949e">Apr</text>
+<text x="451.5" y="59" font-size="10" fill="#8b949e">May</text>
+<text x="526.5" y="59" font-size="10" fill="#8b949e">Jun</text>
+<text x="586.5" y="59" font-size="10" fill="#8b949e">Jul</text>
+<text x="646.5" y="59" font-size="10" fill="#8b949e">Aug</text>
+<text x="721.5" y="59" font-size="10" fill="#8b949e">Sep</text>
+<text x="781.5" y="59" font-size="10" fill="#8b949e">Oct</text>
+</svg>
